@@ -1,0 +1,43 @@
+:root{
+    /* Color */
+    --primaryColor : #000000;
+    --secondaryColor : #fff;
+}
+body{
+    background-color: #0c0d1aee;
+}
+h2{
+    color: #fff;
+}
+p{
+    color: rgb(255, 255, 255);
+}
+.heading{
+   
+    font-size: 24px;
+    font-weight: 700;
+}
+.subheading{
+    font-weight: 300;
+}
+.nav-link{
+    font-family: var(--headingFont);
+    color: #fff;
+}
+.icons-home i{
+    font-size: 1.8rem;
+    color: var(--secondaryColor);
+}
+.carousel-item{
+    height: 100vh;
+}
+
+.carousel-item img{
+    height: 100vh;
+    object-fit: cover;
+}
+
+
+
+
+
