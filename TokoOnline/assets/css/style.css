@@ -36,7 +36,11 @@ p{
     height: 100vh;
     object-fit: cover;
 }
-
+.card-img-top{
+    width:291px;
+    height:291px;
+    align-self: center;
+}
 
 
 
