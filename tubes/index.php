@@ -124,7 +124,7 @@
                 <p class="card-title"><?=$results['nama']?></p>
                 <p class="text-second card-text price">Rp <?=number_format($results['harga'],'0',',','.')?></p>
                 <div class="m-auto">
-                  <a href="beli.php?id=<?php echo $results['id'];?>" class="btn btn-danger my-cart-btn">Beli</a>
+                  <a href="beli.php?id=<?php echo $results['id'];?>" class="btn btn-danger my-cart-btn">Add to cart</a>
                   <a href="#" class="btn btn-info btn-white">Detail</a>
                 </div>
               </div>
@@ -174,7 +174,7 @@
 									<p class="card-title"><?=$results['nama']?></p>
 									<p class="text-second card-text">Rp <?=number_format($results['harga'],'0',',','.')?></p>
 									<div class="mt-auto">
-										<a href="beli.php?id=<?php echo $results ['id'] ?>" class="btn btn-danger my-cart-btn">Beli</a>
+										<a href="beli.php?id=<?php echo $results ['id'] ?>" class="btn btn-danger my-cart-btn">Add to cart</a>
 										<a href="#" class="btn btn-info btn-white">Detail</a>
 									</div>
 							</div>
