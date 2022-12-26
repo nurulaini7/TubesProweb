@@ -58,7 +58,7 @@
               <a class="nav-link" href="#">Register</a>
             </li>
             <div class="icons-home nav-icons">
-              <a href="#"><i class='bx bx-shopping-bag ms-2'></i></a>
+              <a href="keranjang.php"><i class='bx bxs-cart'></i></i></a>
             </div>
             <div class="icons-home nav-icons">
               <a href="includes/search.php"><i class='bx bx-search'></i></a>
@@ -96,6 +96,7 @@
 
 
     <!--Awal Produk-->
+
 		<section class="new-arrivals" id="apple">
 			<div class="container">
 				<div class="text-arrivals row align-items-center">
@@ -105,6 +106,8 @@
 					<div class="text-show-all col-5 col-sm-6 col-md-3 text-right text-main pr-md-0">
 					</div>
 				</div>
+
+        
 				
 				<div class="products row">
 					<?php 
@@ -121,7 +124,7 @@
                 <p class="card-title"><?=$results['nama']?></p>
                 <p class="text-second card-text price">Rp <?=number_format($results['harga'],'0',',','.')?></p>
                 <div class="m-auto">
-                  <button class="btn btn-danger my-cart-btn">Add to cart</button>
+                  <a href="beli.php?id=<?php echo $results['id'];?>" class="btn btn-danger my-cart-btn">Beli</a>
                   <a href="#" class="btn btn-info btn-white">Detail</a>
                 </div>
               </div>
@@ -171,7 +174,7 @@
 									<p class="card-title"><?=$results['nama']?></p>
 									<p class="text-second card-text">Rp <?=number_format($results['harga'],'0',',','.')?></p>
 									<div class="mt-auto">
-										<button class="btn btn-danger my-cart-btn">Add to cart</button>
+										<a href="beli.php?id=<?php echo $results ['id'] ?>" class="btn btn-danger my-cart-btn">Beli</a>
 										<a href="#" class="btn btn-info btn-white">Detail</a>
 									</div>
 							</div>
@@ -182,9 +185,11 @@
             $i++;
             endforeach; 
           ?>
-
 				</div>
 			</div>
+
+    
+
 		</section>
     <!-- akhir Produk -->
     
@@ -251,6 +256,7 @@
       </div>
     </footer>
 
+    
 
     
     <script src="assets/js/main.js"></script>
@@ -261,6 +267,6 @@
     
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+ 
   </body>
 </html>
-
