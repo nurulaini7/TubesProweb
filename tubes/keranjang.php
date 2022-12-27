@@ -2,7 +2,6 @@
 session_start();
 
 $koneksi = new mysqli ("localhost", "root", "", "eracom");
-
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +25,6 @@ $koneksi = new mysqli ("localhost", "root", "", "eracom");
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto">
-            
 
             <li class="nav-item mt-2">
               <a class="nav-link" href="index.php">Home</a>
@@ -40,19 +38,23 @@ $koneksi = new mysqli ("localhost", "root", "", "eracom");
             <div class="icons-home nav-icons">
               <a href=""><i class='bx bxs-cart'></i></i></a>
             </div>
+            <div class="icons-home nav-icons">
+              <a href="includes/search.php"><i class='bx bx-search'></i></a>
+            </div>
           </ul>
         </div>
       </div>
     </nav>
- <section class="konten bg-white">
-    <div class="container">
-        <h1>Keranjang Belanja</h1>
+ <section class="konten  text-light mt-5">
+    <div class="container mt-6">
+        <h1 class="text-center mt-5"><b>Keranjang Belanja</h1>
         <hr>
-        <table class="table table-bordered">
+        <table class="table table-bordered mb-5 bold text-light">
             <thead>
                 <tr>
                     <th>No</th>
                     <th>Produk</th>
+                    <th>Nama</th>
                     <th>Harga</th>
                     <th>Jumlah</th>
                     <th>Total</th>
@@ -69,6 +71,7 @@ $koneksi = new mysqli ("localhost", "root", "", "eracom");
                     ?>
                 <tr>
                     <td><?php echo $nomor; ?></td>
+                    <td><img src="assets/img/produk/<?= $pisah["gambar"] ?>" width="50"></td>
                     <td><?php echo $pisah ["nama"]; ?></td>
                     <td>Rp.<?php echo number_format($pisah["harga"]);?> </td>
                     <td><?php echo $jumlah; ?></td>
@@ -81,10 +84,81 @@ $koneksi = new mysqli ("localhost", "root", "", "eracom");
                 <?php endforeach ?>
             </tbody>
         </table>
-                <a href="index.php" class="btn btn-default">Lanjut belanja</a>
-                <a href="checkout.php" class="btn btn-primary">checkout</a>
+                <a href="index.php" class="btn btn-primary mb-5">Lanjut belanja</a>
+                <a href="checkout.php" class="btn btn-primary mb-5">checkout</a>
 
     </div>
  </section>
+
+
+
+  <!-- Awal Footer -->
+  <footer>
+      <div class="container">
+        <div class="footer-content row mb-4">
+          <div class="footer-brand col-12 col-sm-12 col-md-3 col-lg-3">
+            <div>
+            <img src="assets/img/logo.png" alt="" width="300px" height="150px" />
+              <br><br>
+              <i class='bx bxl-visa' style='color:#fff9f9'  ></i>
+
+            </div>
+          </div>
+  
+          <div class="footer-items-box col-12 col-sm-12 col-md-9 col-lg-9">
+            <div class="footer-items row">
+              <div class="footer-item col-12 col-sm-12 col-md-4">
+                <div>
+                  <div class="footer-item-content">
+                    <h3 class="text-main">Anggota Kelompok</h3>
+                    <p>Hanzel Oclihar Tjiam</p>
+                    <p>Umar Hilmi</a></p>
+                    <p>Nurul Aini</a></p>
+                    <p>Annisa Cahyani</a></p>
+                    <p>Jungjungan Hans Aryanta Silitonga</a></p>
+                    <p>Firman Ramadhani Yusma</a></p>
+                  </div>
+                </div>
+              </div>
+    
+              <div class="footer-item col-12 col-sm-12 col-md-4">
+                <div>
+                  <div class="footer-item-content">
+                    <h3 class="text-main">Business</h3>
+                    <p><a href="#">eracom22@gmail.com</a></p>
+                    <p><a href="#">021-1234-5678</a></p>
+                    <p><a href="#">Medan, Sumatera Utara</a></p>
+                  </div>
+                </div>
+              </div>
+    
+              <div class="footer-item col-12 col-sm-12 col-md-4">
+                <div>
+                  <div class="footer-item-content">
+                    <h3 class="text-main">About</h3>
+                    
+                      <p>Eracom merupakan website toko online yang menjual perangkat elektronik berupa laptop, kami menyediakan kebutuhan anda pada era industri 4.0 
+                         </p>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="copyright-section border-top">
+          <div class="row">
+            <div class="col-12">
+              <div class="copyright-content text-center mt-4">
+                <p class="text-second">Eracom Online Store Copyright &copy; 2022 All Rights Reserved</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- akhir footer -->
 </body>
 </html>
