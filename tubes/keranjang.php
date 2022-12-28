@@ -98,71 +98,108 @@ $koneksi = new mysqli ("localhost", "root", "", "eracom");
 
 
   <!-- Awal Footer -->
-  <footer>
+ <footer>
       <div class="container">
         <div class="footer-content row mb-4">
           <div class="footer-brand col-12 col-sm-12 col-md-3 col-lg-3">
             <div>
-            <img src="assets/img/logo.png" alt="" width="300px" height="150px" />
-              <br><br>
-              <i class='bx bxl-visa' style='color:#fff9f9'  ></i>
-
+            <h3 class="text-main mb-4 text-white">About</h3>
+            <img src="assets/img/logo.png" alt="" width="300px" height="100px" />
+            <br><br><br>
+            <h6 class="text-white">Eracom merupakan website toko online yang menjual perangkat elektronik berupa laptop, kami menyediakan kebutuhan anda pada era industri 4.0 </h6>
+            <br><br> 
+            <div class="color-white">
+              <a href="" class="me-4 link-secondary">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="" class="me-4 link-secondary">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="" class="me-4 link-secondary">
+                <i class="fab fa-google"></i>
+              </a>
+              <a href="" class="me-4 link-secondary">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="" class="me-4 link-secondary">
+                <i class="fab fa-github"></i>
+              </a>
             </div>
+            <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+          </div>
+          </div>
           </div>
   
           <div class="footer-items-box col-12 col-sm-12 col-md-9 col-lg-9">
             <div class="footer-items row">
               <div class="footer-item col-12 col-sm-12 col-md-4">
                 <div>
-                  <div class="footer-item-content">
-                    <h3 class="text-main">Anggota Kelompok</h3>
-                    <p>Hanzel Oclihar Tjiam</p>
-                    <p>Umar Hilmi</a></p>
-                    <p>Nurul Aini</a></p>
-                    <p>Annisa Cahyani</a></p>
-                    <p>Jungjungan Hans Aryanta Silitonga</a></p>
-                    <p>Firman Ramadhani Yusma</a></p>
+                  <div class="footer-item-content me-4">
+                    <h3 class="text-main ">Fitur</h3>
+                    <p>Home</p>
+                    <p>Kategori Produk</a></p>
+                    <p>Keranjang</a></p>
+                    <p>Register</a></p>
+                    <p>Login</a></p>
+                    <p>Pencarian</a></p>
                   </div>
                 </div>
               </div>
     
-              <div class="footer-item col-12 col-sm-12 col-md-4">
-                <div>
-                  <div class="footer-item-content">
-                    <h3 class="text-main">Business</h3>
-                    <p><a href="#">eracom22@gmail.com</a></p>
-                    <p><a href="#">021-1234-5678</a></p>
-                    <p><a href="#">Medan, Sumatera Utara</a></p>
+                      <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase mb-4 text-white">Kontak Kami</h5>
+                        <ul class="fa-ul text-white" style="margin-left: 1.65em;">
+                          <li class="mb-3">
+                            <span class="fa-li"><i class="fas fa-home"></i></span><span class="ms-2">Medan, 00-967, Sumatera Utara</span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="fa-li"><i class="fas fa-envelope"></i></span><span class="ms-2">Eracom22@gmail.com</span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="fa-li"><i class="fas fa-phone"></i></span><span class="ms-2">+62 8123 456 789</span>
+                          </li>
+                        </ul>
+                      </div>
+
+                            <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                            <h5 class="text-uppercase mb-4 text-white">Jam Operasional</h5>
+
+                            <table class="table text-center text-white">
+                              <tbody class="fw-normal">
+                                <tr>
+                                  <td>Mon - Thu:</td>
+                                  <td>8am - 9pm</td>
+                                </tr>
+                                <tr>
+                                  <td>Fri - Sat:</td>
+                                  <td>8am - 9pm</td>
+                                </tr>
+                                <tr>
+                                  <td>Sunday:</td>
+                                  <td>9am - 10pm</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
+                </div>
               </div>
-    
-              <div class="footer-item col-12 col-sm-12 col-md-4">
-                <div>
-                  <div class="footer-item-content">
-                    <h3 class="text-main">About</h3>
-                    
-                      <p>Eracom merupakan website toko online yang menjual perangkat elektronik berupa laptop, kami menyediakan kebutuhan anda pada era industri 4.0 
-                         </p>
-                    
+                      
+              <div class="copyright-section border-top">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="copyright-content text-center mt-4">
+                      <p class="text-second">Eracom Online Store Copyright &copy; 2022 All Rights Reserved</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-  
-        <div class="copyright-section border-top">
-          <div class="row">
-            <div class="col-12">
-              <div class="copyright-content text-center mt-4">
-                <p class="text-second">Eracom Online Store Copyright &copy; 2022 All Rights Reserved</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+          </footer>
 
     <!-- akhir footer -->
 </body>
