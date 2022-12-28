@@ -199,8 +199,9 @@
         <div class="footer-content row mb-4">
           <div class="footer-brand col-12 col-sm-12 col-md-3 col-lg-3">
             <div>
+            <h3 class="text-main mb-4 text-white">About</h3>
             <img src="assets/img/logo.png" alt="" width="300px" height="100px" />
-            <br><br>
+            <br><br><br>
             <h6 class="text-white">Eracom merupakan website toko online yang menjual perangkat elektronik berupa laptop, kami menyediakan kebutuhan anda pada era industri 4.0 </h6>
             <br><br> 
             <div class="color-white">
@@ -229,8 +230,8 @@
             <div class="footer-items row">
               <div class="footer-item col-12 col-sm-12 col-md-4">
                 <div>
-                  <div class="footer-item-content">
-                    <h3 class="text-main">Fitur</h3>
+                  <div class="footer-item-content me-4">
+                    <h3 class="text-main ">Fitur</h3>
                     <p>Home</p>
                     <p>Kategori Produk</a></p>
                     <p>Keranjang</a></p>
