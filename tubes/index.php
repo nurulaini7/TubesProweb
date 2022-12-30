@@ -193,6 +193,64 @@
 		</section>
     <!-- akhir Produk -->
     
+
+	  
+    <!-- Awal testimoni -->
+    <?php
+	
+  require('includes/komentar.php');
+
+	if (isset($_POST['kirim'])) {
+
+		$name = $_POST['nama'];
+		$testimoni = $_POST['testimoni'];
+		
+		$sql = "INSERT INTO testimoni (nama, testimoni)
+		VALUES ('$name', '$testimoni')";
+
+		if ($conn->query($sql) === TRUE) {
+		  echo "";
+		} else {
+		  echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+	}
+
+?>
+    <h2 class="text-white text-center">Testimoni Pengguna</h2>
+    <div class="mb-3">
+		<form action="" method="post" class="form">
+			<input type="text" class="form-control w-5" name="nama" placeholder="Nama">
+			<br>
+			<textarea name="testimoni" cols="30" rows="10" class="form-control" placeholder="pesan"></textarea>
+			<br>
+			<button type="submit" class="btn btn-primary" name="kirim">kirim</button>
+		</form>
+	</div>
+
+	<div class="content">
+		<?php
+
+			$sql = "SELECT * FROM testimoni";
+			$result = $conn->query($sql);
+
+			if ($result->num_rows > 0) {
+			  
+			  while($row = $result->fetch_assoc()) {
+			   
+		?>
+		<h3 class="text-white"><?php echo $row['nama']; ?></h3>
+		<p class="text-white"><?php echo $row['testimoni']; ?></p>
+
+		<?php } } ?>
+	</div>
+        
+  
+      
+    <!-- Akhir testimoni -->
+
+
+
+
     <!-- Awal Footer -->
      <footer>
       <div class="container">
