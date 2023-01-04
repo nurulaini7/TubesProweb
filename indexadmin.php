@@ -244,7 +244,7 @@ session_start();
                             <td> X </td>
                             <td> Rp.<?php ?> </td>
                             <td> Rp.<?php ?> </td>
-                            <td><img src="assets/img/produk/<?= $pisah["gambar"] ?>" width="50"></td>
+                            <td><img src="assets/img/produk/<?= $[""] ?>" width="50"></td>
                             <td> X </td>
                             <td> X </td>
                             <td> X </td>
@@ -256,7 +256,7 @@ session_start();
                             <td> X </td>
                             <td> Rp.<?php ?> </td>
                             <td> Rp.<?php ?> </td>
-                            <td><img src="assets/img/produk/<?= $pisah["gambar"] ?>" width="50"></td>
+                            <td><img src="assets/img/produk/<?= $[""] ?>" width="50"></td>
                             <td> X </td>
                             <td> X </td>
                             <td> X </td>
@@ -268,7 +268,7 @@ session_start();
                             <td> X </td>
                             <td> Rp.<?php ?> </td>
                             <td> Rp.<?php ?> </td>
-                            <td><img src="assets/img/produk/<?= $pisah["gambar"] ?>" width="50"></td>
+                            <td><img src="assets/img/produk/<?= $[""] ?>" width="50"></td>
                             <td> X </td>
                             <td> X </td>
                             <td> X </td>
