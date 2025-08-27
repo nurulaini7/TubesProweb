@@ -22,6 +22,14 @@ import seaborn as sns
 import warnings
 warnings.filterwarnings('ignore')
 
+# Import video downloader
+try:
+    from video_downloader import VideoDownloader
+    DOWNLOADER_AVAILABLE = True
+except ImportError:
+    DOWNLOADER_AVAILABLE = False
+    print("Warning: VideoDownloader not available. Videos must be downloaded manually.")
+
 class AudioExtractor:
     """
     Class untuk ekstraksi audio dari video menggunakan ffmpeg
@@ -387,17 +395,28 @@ class DatasetProcessor:
     Class untuk memproses dataset dan menggabungkan semua komponen
     """
     
-    def __init__(self, video_dir, output_dir="processed_data"):
+    def __init__(self, video_dir, output_dir="processed_data", enable_download=True):
         self.video_dir = video_dir
         self.output_dir = output_dir
+        self.enable_download = enable_download
         
         # Create output directory
         os.makedirs(output_dir, exist_ok=True)
+        os.makedirs(video_dir, exist_ok=True)
         
         # Initialize components
         self.audio_extractor = AudioExtractor()
         self.feature_extractor = AudioFeatureExtractor()
         self.frame_detector = VideoFrameDetector()
+        
+        # Initialize video downloader if available and enabled
+        if enable_download and DOWNLOADER_AVAILABLE:
+            self.video_downloader = VideoDownloader(download_dir=video_dir)
+            print(f"DatasetProcessor initialized with video downloader enabled")
+        else:
+            self.video_downloader = None
+            if enable_download:
+                print("Video downloader not available - videos must be pre-downloaded")
         
         print(f"DatasetProcessor initialized with output directory: {output_dir}")
     
@@ -415,10 +434,76 @@ class DatasetProcessor:
             df = pd.read_csv(csv_path)
             print(f"Dataset loaded successfully: {len(df)} entries")
             print(f"Columns: {list(df.columns)}")
+            
+            # Check required columns
+            required_cols = ['id', 'video', 'emotion']
+            missing_cols = [col for col in required_cols if col not in df.columns]
+            if missing_cols:
+                print(f"Warning: Missing required columns: {missing_cols}")
+                print("Expected columns: 'id' (video ID), 'video' (URL), 'emotion' (label)")
+            
             return df
         except Exception as e:
             print(f"Error loading dataset: {e}")
             return None
+    
+    def download_videos_from_dataset(self, csv_path, max_downloads=None, video_col='video', id_col='id'):
+        """
+        Download semua video dari dataset CSV
+        
+        Args:
+            csv_path (str): Path ke file CSV dataset
+            max_downloads (int): Maksimal jumlah download (None = unlimited)
+            video_col (str): Nama kolom yang berisi URL video
+            id_col (str): Nama kolom yang berisi ID video
+        
+        Returns:
+            pd.DataFrame: Updated dataframe dengan kolom 'local_path'
+        """
+        if not self.video_downloader:
+            print("Error: Video downloader not available")
+            return None
+        
+        print(f"Starting video download from {csv_path}")
+        print(f"Max downloads: {'Unlimited' if max_downloads is None else max_downloads}")
+        
+        # Download videos
+        df_with_downloads = self.video_downloader.download_from_csv(
+            csv_path=csv_path,
+            video_col=video_col,
+            id_col=id_col,
+            max_downloads=max_downloads
+        )
+        
+        return df_with_downloads
+    
+    def get_video_path(self, df, video_id):
+        """
+        Get local video path untuk video ID tertentu
+        
+        Args:
+            df (pd.DataFrame): Dataset dengan kolom local_path
+            video_id (str): ID video
+        
+        Returns:
+            str: Path ke file video lokal, atau None jika tidak ada
+        """
+        if 'local_path' in df.columns:
+            # Cari berdasarkan downloaded videos
+            video_row = df[df['id'] == video_id]
+            if len(video_row) > 0 and pd.notna(video_row.iloc[0]['local_path']):
+                local_path = video_row.iloc[0]['local_path']
+                if os.path.exists(local_path):
+                    return local_path
+        
+        # Fallback: cari file dengan nama video_id
+        possible_extensions = ['.mp4', '.avi', '.mov', '.mkv', '.webm']
+        for ext in possible_extensions:
+            video_path = os.path.join(self.video_dir, f"{video_id}{ext}")
+            if os.path.exists(video_path):
+                return video_path
+        
+        return None
     
     def process_single_video(self, video_path, video_id, emotion_label, max_segments=None):
         """
@@ -503,25 +588,58 @@ class DatasetProcessor:
         
         return segments
     
-    def process_dataset(self, csv_path, max_videos=None, max_segments_per_video=None):
+    def process_dataset(self, csv_path, max_videos=None, max_segments_per_video=None, 
+                       download_videos=True, max_downloads=None):
         """
-        Proses seluruh dataset
+        Proses seluruh dataset dengan opsi download otomatis
         
         Args:
             csv_path (str): Path ke file CSV dataset
             max_videos (int): Maximum number of videos to process
             max_segments_per_video (int): Maximum segments per video
+            download_videos (bool): Apakah download video otomatis
+            max_downloads (int): Maximum number of videos to download
         
         Returns:
             pd.DataFrame: Processed dataset
         """
-        # Load dataset
-        df = self.load_dataset(csv_path)
-        if df is None:
-            return None
+        print(f"=== Starting Dataset Processing ===")
+        print(f"CSV path: {csv_path}")
+        print(f"Max videos to process: {max_videos or 'All'}")
+        print(f"Max segments per video: {max_segments_per_video or 'All'}")
+        print(f"Download videos: {download_videos}")
+        
+        # Step 1: Download videos if enabled
+        if download_videos and self.video_downloader:
+            print(f"\n--- Step 1: Downloading Videos ---")
+            df = self.download_videos_from_dataset(
+                csv_path=csv_path,
+                max_downloads=max_downloads or max_videos,
+                video_col='video',
+                id_col='id'
+            )
+            
+            if df is None:
+                print("Failed to download videos")
+                return None
+            
+            # Save updated CSV with download info
+            download_csv_path = csv_path.replace('.csv', '_with_downloads.csv')
+            df.to_csv(download_csv_path, index=False)
+            print(f"Updated CSV saved: {download_csv_path}")
+            
+        else:
+            print(f"\n--- Step 1: Loading Dataset (No Download) ---")
+            df = self.load_dataset(csv_path)
+            if df is None:
+                return None
+        
+        # Step 2: Process videos for feature extraction
+        print(f"\n--- Step 2: Processing Videos for Feature Extraction ---")
         
         all_segments = []
         processed_videos = 0
+        skipped_videos = 0
         
         for idx, row in df.iterrows():
             if max_videos and processed_videos >= max_videos:
@@ -531,14 +649,17 @@ class DatasetProcessor:
                 video_id = str(row['id'])
                 emotion_label = str(row['emotion'])
                 
-                # Construct video path (assuming videos are downloaded to video_dir)
-                # You may need to adjust this based on your file naming convention
-                video_filename = f"{video_id}.mp4"  # Adjust extension as needed
-                video_path = os.path.join(self.video_dir, video_filename)
+                # Get video path (try downloaded path first, then fallback)
+                video_path = self.get_video_path(df, video_id)
                 
-                if not os.path.exists(video_path):
-                    print(f"Video file not found: {video_path}")
+                if not video_path:
+                    print(f"Video file not found for ID: {video_id}")
+                    skipped_videos += 1
                     continue
+                
+                print(f"\nProcessing video {processed_videos + 1}: {video_id}")
+                print(f"  Path: {video_path}")
+                print(f"  Emotion: {emotion_label}")
                 
                 # Process video
                 segments = self.process_single_video(
@@ -548,10 +669,12 @@ class DatasetProcessor:
                 all_segments.extend(segments)
                 processed_videos += 1
                 
+                print(f"✓ Processed {len(segments)} segments from {video_id}")
                 print(f"Progress: {processed_videos}/{min(len(df), max_videos or len(df))} videos processed")
                 
             except Exception as e:
-                print(f"Error processing row {idx}: {e}")
+                print(f"✗ Error processing video {video_id}: {e}")
+                skipped_videos += 1
                 continue
         
         # Convert to DataFrame

@@ -1,22 +1,38 @@
 # Multimodal Emotion Recognition - Audio Feature Extraction Pipeline
 
-Pipeline untuk ekstraksi fitur audio dari video sebagai bagian dari sistem MER dengan pendekatan Multiple Instance Learning (MIL).
+Pipeline lengkap untuk ekstraksi fitur audio dari video dengan **download otomatis** dari berbagai sumber (Instagram Reels, Google Drive, YouTube, dll) sebagai bagian dari sistem MER dengan pendekatan Multiple Instance Learning (MIL).
 
-## Overview
+## 🚀 Features Utama
 
-Pipeline ini mengimplementasikan ekstraksi fitur audio dari video untuk sistem Multimodal Emotion Recognition dengan pendekatan:
-- **Visual**: Deteksi frame dengan wajah menggunakan Haar Cascade (non-pretrained)
-- **Audio**: Ekstraksi fitur MFCC, Chroma, Spectral Contrast, Zero Crossing Rate  
-- **Pendekatan MIL**: Treat label video sebagai weak supervision untuk segmen
+### ✅ Video Download Otomatis
+- **Instagram Reels**: Download langsung dari link Instagram
+- **Google Drive**: Support Google Drive sharing links 
+- **YouTube**: Download dari YouTube URLs
+- **Direct URLs**: Download dari URL video langsung
+- **Error Handling**: Retry mechanism dan handling untuk failed downloads
 
-## Struktur File
+### ✅ Audio Feature Extraction
+- **MFCC**: 13 koefisien × 3 statistik = 39 fitur
+- **Chroma**: 12 koefisien × 3 statistik = 36 fitur  
+- **Spectral Contrast**: 7 band × 3 statistik = 21 fitur
+- **Zero Crossing Rate**: 1 × 3 statistik = 3 fitur
+- **Total**: **99 fitur audio per segmen**
+
+### ✅ Multiple Instance Learning (MIL)
+- Label video sebagai weak supervision untuk segmen
+- Deteksi frame dengan wajah menggunakan Haar Cascade (non-pretrained)
+- Mapping timestamp audio ke frame yang mengandung wajah
+
+## 📁 Struktur File
 
 ```
 /workspace/
 ├── audio_extraction_pipeline.py    # Main pipeline script
-├── setup_colab.py                  # Setup script untuk Google Colab
+├── video_downloader.py             # Video downloader module
+├── complete_setup_colab.py         # Complete setup script
+├── demo_complete_pipeline.py       # Demo lengkap
 ├── README.md                       # Dokumentasi ini
-└── videos/                         # Direktori untuk video input
+└── videos/                         # Direktori untuk video download
 ```
 
 ## Fitur yang Diekstrak
@@ -40,31 +56,40 @@ vid001_seg001,vid001,vid001_frame_000030,1.50,Joy,2,12.34,-1.23,0.45,...
 vid001_seg002,vid001,vid001_frame_000060,3.00,Joy,1,10.12,-0.98,0.33,...
 ```
 
-## Penggunaan di Google Colab
+## 🔧 Quick Start di Google Colab
 
-### 1. Setup Environment
+### 1. Complete Setup (Recommended)
 
 ```python
-# Download dan jalankan setup script
-!wget https://raw.githubusercontent.com/your-repo/setup_colab.py
-!python setup_colab.py
+# Upload files ke Colab atau download dari repository
+# Kemudian jalankan setup lengkap:
+!python complete_setup_colab.py
+```
 
-# Atau install manual:
+**Atau setup manual:**
+
+```python
+# Install packages untuk audio processing
 !pip install librosa opencv-python pandas numpy scipy matplotlib seaborn tqdm
+
+# Install packages untuk video download  
+!pip install yt-dlp gdown youtube-dl
+
+# Install system dependencies
 !apt update && apt install -y ffmpeg
 ```
 
-### 2. Import Pipeline
+### 2. Import Pipeline dengan Video Downloader
 
 ```python
-# Download main pipeline
-!wget https://raw.githubusercontent.com/your-repo/audio_extraction_pipeline.py
+# Import main classes
+from audio_extraction_pipeline import DatasetProcessor
+from video_downloader import VideoDownloader
 
-# Import classes
-from audio_extraction_pipeline import DatasetProcessor, AudioExtractor, AudioFeatureExtractor, VideoFrameDetector
+print("Pipeline with video downloader ready!")
 ```
 
-### 3. Setup Directories
+### 3. Setup Directories dan Processor
 
 ```python
 import os
@@ -78,38 +103,71 @@ OUTPUT_DIR = "/content/processed_data"
 os.makedirs(VIDEO_DIR, exist_ok=True)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# Initialize processor
-processor = DatasetProcessor(VIDEO_DIR, OUTPUT_DIR)
+# Initialize processor dengan download enabled
+processor = DatasetProcessor(
+    video_dir=VIDEO_DIR, 
+    output_dir=OUTPUT_DIR,
+    enable_download=True  # 🔥 Enable automatic video download
+)
 ```
 
-### 4. Upload Data
+### 4. Prepare Your Dataset
+
+Buat file CSV dengan format:
+
+```csv
+id,video,emotion
+001,https://www.instagram.com/reel/ABC123/,Joy
+002,https://drive.google.com/file/d/1abc123/view,Sad
+003,https://www.youtube.com/watch?v=xyz789,Anger
+004,https://example.com/video.mp4,Fear
+005,https://drive.google.com/file/d/1def456/view,Neutral
+```
 
 ```python
-# Upload file CSV dataset
+# Upload CSV ke Colab
 from google.colab import files
-uploaded = files.upload()  # Upload datatrain.csv
+uploaded = files.upload()  # Upload your datatrain.csv
 
-# Upload videos ke /content/videos/
-# Atau gunakan Google Drive mounting
+# Atau mount Google Drive
 from google.colab import drive
 drive.mount('/content/drive')
+CSV_PATH = '/content/drive/MyDrive/datatrain.csv'
 ```
 
-### 5. Proses Dataset
+### 5. Run Complete Pipeline (Download + Process)
 
 ```python
-# Proses seluruh dataset
+# 🚀 One-command processing dengan auto download
 processed_df = processor.process_dataset(
     csv_path=CSV_PATH,
-    max_videos=None,  # Proses semua video (None = unlimited)
-    max_segments_per_video=None  # Semua segmen
+    max_videos=10,           # Process 10 videos
+    max_segments_per_video=15,   # Max 15 segments per video
+    download_videos=True,        # 🔥 Enable auto download
+    max_downloads=10         # Download max 10 videos
 )
 
-# Atau untuk testing dengan limitasi
+if processed_df is not None:
+    print(f"✅ Successfully processed {len(processed_df)} segments")
+    print(f"📁 From {processed_df['video_id'].nunique()} videos")
+    print(f"🎭 Emotions: {processed_df['label'].value_counts().to_dict()}")
+```
+
+### 6. Alternative: Download Only Mode
+
+```python
+# Just download videos first (no processing)
+downloader = VideoDownloader(download_dir="/content/videos")
+
+downloaded_df = downloader.download_from_csv(
+    csv_path=CSV_PATH,
+    max_downloads=20
+)
+
+# Then process later
 processed_df = processor.process_dataset(
     csv_path=CSV_PATH,
-    max_videos=5,  # Maksimal 5 video
-    max_segments_per_video=10  # Maksimal 10 segmen per video
+    download_videos=False  # Skip download, use existing videos
 )
 ```
 
